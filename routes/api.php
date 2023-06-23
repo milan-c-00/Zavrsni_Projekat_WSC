@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\api\AuthController;
+use App\Http\Controllers\api\BrandController;
 use App\Http\Controllers\api\RegisterController;
+use App\Http\Controllers\api\VehicleController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -32,12 +34,21 @@ Route::middleware('auth:sanctum')->group( function () {
 
     Route::post('/logout', [AuthController::class, 'logout']);  // Every logged in user can log out
 
+    Route::get('/vehicles', [VehicleController::class, 'index']);       // Get all vehicles
+    Route::get('/vehicles/{vehicle}', [VehicleController::class, 'show']);      // Get a single vehicle
+
     /*
      * Routes that require admin role for access
      * */
     Route::middleware('check_role:admin')->group( function () {
 
+        // Get brands (for creating vehicle or search filtering)
+        Route::get('/brands', [BrandController::class, 'index']);
 
+        // Routes for CRUD operations on vehicles
+        Route::post('/vehicles', [VehicleController::class, 'store']);      // Store vehicle
+        Route::put('/vehicles/{vehicle}', [VehicleController::class, 'update']);
+        Route::delete('/vehicles/{vehicle}', [VehicleController::class, 'destroy']);
 
     });
 
@@ -46,6 +57,10 @@ Route::middleware('auth:sanctum')->group( function () {
 
 
     });
+
+
+
+//    Route::apiResource('/brands', BrandController::class);
 
 });
 

@@ -21,7 +21,7 @@ class AuthController extends Controller
 
         $validated = $request->validated();     // Performing validation for login request
 
-        $token = $this->authService->login($validated);
+        $token = $this->authService->login($validated);     // Call auth service for validated data
         if (!$token)
             return response(['message' => 'Invalid credentials'], ResponseAlias::HTTP_UNPROCESSABLE_ENTITY);
         return response(['token' => $token], ResponseAlias::HTTP_OK);

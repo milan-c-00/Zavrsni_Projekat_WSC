@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 class AuthService
 {
 
+    // If validation is passed, service gets array with validated data
     public function login($validated) {
 
         $email = $validated['email'];
@@ -21,6 +22,7 @@ class AuthService
 
     }
 
+    // Check if user with given email exists in database and retrieve it if it does
     public function getUser($email, $password) {
 
         $user = User::query()->where('email', $email)->first();
@@ -32,6 +34,7 @@ class AuthService
 
     }
 
+    // Delete all tokens for currently authenticated user
     public function logout() {
 
         auth()->user()->tokens()->delete();

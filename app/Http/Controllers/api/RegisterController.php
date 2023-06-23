@@ -20,7 +20,7 @@ class RegisterController extends Controller
 
     public function register(RegisterRequest $request) {
 
-        $user = $this->registerService->register($request->validated());
+        $user = $this->registerService->register($request->validated());    // Call register service for validated data
 
         if (!$user)
             return response(['message' => 'Invalid request'], ResponseAlias::HTTP_UNPROCESSABLE_ENTITY);
