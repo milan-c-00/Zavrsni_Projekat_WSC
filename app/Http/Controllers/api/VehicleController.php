@@ -40,7 +40,7 @@ class VehicleController extends Controller
     // Create new vehicle
     public function store(StoreVehicleRequest $request) {
 
-        $vehicle = $this->vehicleService->store($request->validated());
+        $vehicle = $this->vehicleService->store($request);
 
         if(!$vehicle)
             return response(['message' => 'Invalid request!'], ResponseAlias::HTTP_UNPROCESSABLE_ENTITY);
@@ -51,7 +51,8 @@ class VehicleController extends Controller
     public function update(Vehicle $vehicle, UpdateVehicleRequest $request) {
         $validated = $request->validated();
         unset($validated['vehicle_image'], $validated['vehicle_specs']);
-        $updated = $this->vehicleService->update($vehicle, $validated);
+        // Removing image and specs doc from update request, they are handled other way
+        $updated = $this->vehicleService->update($vehicle, $validated, $request);
 
         if (!$updated){
             return response(['message' => 'Update failed!'], ResponseAlias::HTTP_BAD_REQUEST);

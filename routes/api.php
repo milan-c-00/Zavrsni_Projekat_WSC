@@ -25,14 +25,13 @@ use Illuminate\Support\Facades\Route;
 Route::post('/register', [RegisterController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
-
 /*
  * Routes for other application functionalities (authentication required)
  * */
 
 Route::middleware('auth:sanctum')->group( function () {
 
-    Route::post('/logout', [AuthController::class, 'logout']);  // Every logged in user can log out
+    Route::post('/logout', [AuthController::class, 'logout']);  // Every logged user can log out
 
     Route::get('/vehicles', [VehicleController::class, 'index']);       // Get all vehicles
     Route::get('/vehicles/{vehicle}', [VehicleController::class, 'show']);      // Get a single vehicle
@@ -47,11 +46,15 @@ Route::middleware('auth:sanctum')->group( function () {
 
         // Routes for CRUD operations on vehicles
         Route::post('/vehicles', [VehicleController::class, 'store']);      // Store vehicle
-        Route::put('/vehicles/{vehicle}', [VehicleController::class, 'update']);
+        //Route::put('/vehicles/{vehicle}', [VehicleController::class, 'update']);
+        Route::post('/vehicles/{vehicle}', [VehicleController::class, 'update']);   // Only for testing update with postman
         Route::delete('/vehicles/{vehicle}', [VehicleController::class, 'destroy']);
 
     });
 
+    /*
+     * Routes that require user role for access
+     */
     Route::middleware('check_role:user')->group( function () {
 
 

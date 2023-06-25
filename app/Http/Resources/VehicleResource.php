@@ -18,6 +18,7 @@ class VehicleResource extends JsonResource
         return [
             'brand_id' => $this->brand_id,
             'vehicle_model_id' => $this->vehicle_model_id,
+            'available' => $this->available,
             'year' => $this->year,
             'price' => $this->price,
             'fuel' => $this->fuel,
@@ -25,7 +26,9 @@ class VehicleResource extends JsonResource
             'doors' => $this->doors,
             'description' => $this->description,
             'brand' => BrandResource::make($this->brand),
-            'vehicle_model' => VehicleModelResource::make($this->vehicle_model)
+            'vehicle_model' => VehicleModelResource::make($this->vehicle_model),
+            'image' => ImageResource::make($this->image),
+            'document' => DocumentResource::make($this->document)
         ];
     }
 }

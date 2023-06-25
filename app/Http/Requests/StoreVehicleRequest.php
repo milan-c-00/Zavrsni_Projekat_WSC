@@ -30,8 +30,8 @@ class StoreVehicleRequest extends FormRequest
             'color' => 'nullable|string|max:255',
             'doors' => 'nullable|integer|max:7',
             'description' => 'nullable|string|max:512',
-            'vehicle_image' => 'image',
-            'vehicle_specs' => 'file|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx,txt'
+            'image' => 'image',
+            'specs' => 'file'
         ];
     }
 }

@@ -2,12 +2,21 @@
 
 namespace App\Http\Services;
 
+use App\Http\Controllers\api\DocumentController;
+use App\Http\Controllers\api\ImageController;
+use App\Http\Requests\StoreVehicleRequest;
 use App\Models\Vehicle;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+
 
 class VehicleService
 {
+    protected $imageController;
+    protected $documentController;
+    public function __construct(ImageController $imageController, DocumentController $documentController){
+        $this->imageController = $imageController;
+        $this->documentController = $documentController;
+    }
 
     // Getting all vehicles and ability to filter them based on multiple params
     public function index(Request $request) {
@@ -55,22 +64,41 @@ class VehicleService
         return $vehicles->get();
         //return $vehicles->paginate(10);   // Depends on requirements
 
-
     }
 
     public function show(Vehicle $vehicle) {
         return Vehicle::query()->where('id', $vehicle->id)->exists();
     }
 
-    public function store($validated) {
-        return Vehicle::query()->create($validated);
+    public function store(StoreVehicleRequest $request) {
+        $vehicle = Vehicle::query()->create($request->validated());
+        if ($request->hasFile('image') && $request->file('image')->isValid()) {
+            $this->imageController->storeVehicleImage($vehicle, $request);
+        }
+        if ($request->hasFile('specs') && $request->file('specs')->isValid()) {
+            $this->documentController->storeVehicleDocument($vehicle, $request);
+        }
+        return $vehicle;
     }
 
-    public function update(Vehicle $vehicle, $validated) {
-        return $vehicle->update($validated);
+    public function update(Vehicle $vehicle, $validated, $request) {
+        $updatedVehicle = $vehicle->update($validated);
+        if ($request->hasFile('image') && $request->file('image')->isValid()) {
+            $this->imageController->updateVehicleImage($vehicle, $request);
+        }
+        if ($request->hasFile('specs') && $request->file('specs')->isValid()) {
+            $this->documentController->updateVehicleDocument($vehicle, $request);
+        }
+        return $updatedVehicle;
     }
 
     public function destroy(Vehicle $vehicle) {
+        if($vehicle->image){
+            $this->imageController->deleteImage($vehicle->image);
+        }
+        if($vehicle->document){
+            $this->documentController->deleteDocument($vehicle->document);
+        }
         return $vehicle->delete();
     }
 
