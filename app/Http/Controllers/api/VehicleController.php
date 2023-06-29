@@ -67,7 +67,7 @@ class VehicleController extends Controller
         if (!$deleted){
             return response(['message' => 'Delete failed!'], ResponseAlias::HTTP_BAD_REQUEST);
         }
-        return response(['message' => 'Deletion successful!'], ResponseAlias::HTTP_OK);
+        return response(['message' => 'Delete successful!'], ResponseAlias::HTTP_OK);
     }
 
 }

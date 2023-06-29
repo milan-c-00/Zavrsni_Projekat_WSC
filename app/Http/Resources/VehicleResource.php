@@ -15,7 +15,15 @@ class VehicleResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        if($request->is('api/reservations/*') or $request->is('api/my-reservations ')){
+            return [
+                'id' => $this->id,
+                'brand' => BrandResource::make($this->brand),
+                'vehicle_model' => VehicleModelResource::make($this->vehicle_model)
+            ];
+        }
         return [
+            'id' => $this->id,
             'brand_id' => $this->brand_id,
             'vehicle_model_id' => $this->vehicle_model_id,
             'available' => $this->available,

@@ -18,7 +18,7 @@ class Vehicle extends Model
     }
 
     public function vehicle_model() {
-        return $this->belongsTo(\App\Models\VehicleModel::class);
+        return $this->belongsTo(VehicleModel::class);
     }
 
     public function image(): MorphOne {

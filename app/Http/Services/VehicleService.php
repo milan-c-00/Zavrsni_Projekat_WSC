@@ -19,6 +19,8 @@ class VehicleService
     }
 
     // Getting all vehicles and ability to filter them based on multiple params
+    // Brand and model based search depends on using name or id for search
+    // Term based search works with brands and models name
     public function index(Request $request) {
 
         $vehicles = Vehicle::query();
@@ -66,10 +68,12 @@ class VehicleService
 
     }
 
+    // Get a single vehicle
     public function show(Vehicle $vehicle) {
         return Vehicle::query()->where('id', $vehicle->id)->exists();
     }
 
+    // Create and store a new vehicle (for admin)
     public function store(StoreVehicleRequest $request) {
         $vehicle = Vehicle::query()->create($request->validated());
         if ($request->hasFile('image') && $request->file('image')->isValid()) {
@@ -81,6 +85,7 @@ class VehicleService
         return $vehicle;
     }
 
+    // Update existing vehicle (for admin)
     public function update(Vehicle $vehicle, $validated, $request) {
         $updatedVehicle = $vehicle->update($validated);
         if ($request->hasFile('image') && $request->file('image')->isValid()) {
@@ -92,6 +97,7 @@ class VehicleService
         return $updatedVehicle;
     }
 
+    // Delete a vehicle (for admin)
     public function destroy(Vehicle $vehicle) {
         if($vehicle->image){
             $this->imageController->deleteImage($vehicle->image);
@@ -101,6 +107,5 @@ class VehicleService
         }
         return $vehicle->delete();
     }
-
 
 }
