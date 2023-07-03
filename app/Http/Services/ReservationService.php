@@ -5,10 +5,12 @@ namespace App\Http\Services;
 use App\Http\Requests\StoreReservationRequest;
 use App\Http\Requests\UpdateReservationRequest;
 use App\Http\Resources\ReservationResource;
+use App\Mail\ReservationConfirmationMail;
 use App\Models\Reservation;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Date;
+use Illuminate\Support\Facades\Mail;
 
 class ReservationService
 {

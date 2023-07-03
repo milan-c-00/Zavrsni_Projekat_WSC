@@ -7,8 +7,10 @@ use App\Http\Requests\StoreReservationRequest;
 use App\Http\Requests\UpdateReservationRequest;
 use App\Http\Resources\ReservationResource;
 use App\Http\Services\ReservationService;
+use App\Mail\ReservationConfirmationMail;
 use App\Models\Reservation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class ReservationController extends Controller
@@ -36,6 +38,8 @@ class ReservationController extends Controller
      */
     public function store(StoreReservationRequest $request)
     {
+//        dd(auth()->user()->id, $request->user_id);
+        $this->authorize('store', [Reservation::class, $request]);
         $reservation = $this->reservationService->store($request);
 
         if($reservation['state'] === false)
@@ -43,7 +47,9 @@ class ReservationController extends Controller
         else{
             if(!$reservation['result'])
                 return response(['message' => 'Invalid request!'], ResponseAlias::HTTP_UNPROCESSABLE_ENTITY);
-            return response(['reservation' => $reservation['result']], ResponseAlias::HTTP_CREATED);
+
+            Mail::to(auth()->user()->email)->queue(new ReservationConfirmationMail($reservation['result']));
+            return response(['reservation' => ReservationResource::make($reservation['result'])], ResponseAlias::HTTP_CREATED);
         }
     }
 
@@ -83,6 +89,8 @@ class ReservationController extends Controller
         else{
             if(!$updated['result'])
                 return response(['message' => 'Update failed!'], ResponseAlias::HTTP_BAD_REQUEST);
+
+            Mail::to(auth()->user()->email)->queue(new ReservationConfirmationMail($reservation));
             return response(['message' => 'Update successful!'], ResponseAlias::HTTP_OK);
         }
     }
