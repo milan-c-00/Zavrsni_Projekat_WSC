@@ -42,9 +42,6 @@ Route::middleware('auth:sanctum')->group( function () {
      * */
     Route::middleware('check_role:admin')->group( function () {
 
-        // Get brands (for creating vehicle or search filtering)
-        Route::get('/brands', [BrandController::class, 'index']);
-
         // Routes for CRUD operations on vehicles
         Route::post('/vehicles', [VehicleController::class, 'store']);      // Store vehicle
         Route::put('/vehicles/{vehicle}', [VehicleController::class, 'update']);    // Update vehicle
@@ -68,7 +65,6 @@ Route::middleware('auth:sanctum')->group( function () {
         Route::apiResource('/reservations', ReservationController::class)->except('index');
 
     });
-//    Route::apiResource('/brands', BrandController::class);
 
 });
 
