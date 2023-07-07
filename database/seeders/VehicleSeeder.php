@@ -19,7 +19,7 @@ class VehicleSeeder extends Seeder
             'A4' => ['year' => 2014, 'price' => 50, 'fuel' => 'Diesel', 'doors' => 5, 'description' => '' ]
         ],
         'BMW' => [
-            '3 Series' => ['year' => 2015, 'price' => 50, 'fuel' => 'Diesel', 'doors' => 5, 'description' => '' ]
+            '3 Series' => ['year' => 2015, 'price' => 55, 'fuel' => 'Diesel', 'doors' => 5, 'description' => '' ]
         ],
         'Hyundai' => [
             'Tucson' => ['year' => 2017, 'price' => 45, 'fuel' => 'Diesel', 'doors' => 5, 'description' => '' ]

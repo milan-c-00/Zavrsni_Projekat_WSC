@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\api;
 
+use App\Exports\ReservationsReportExport;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ReservationsExportRequest;
 use App\Http\Requests\StoreReservationRequest;
 use App\Http\Requests\UpdateReservationRequest;
 use App\Http\Resources\ReservationResource;
@@ -10,7 +12,9 @@ use App\Http\Services\ReservationService;
 use App\Mail\ReservationConfirmationMail;
 use App\Models\Reservation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class ReservationController extends Controller
@@ -38,7 +42,6 @@ class ReservationController extends Controller
      */
     public function store(StoreReservationRequest $request)
     {
-//        dd(auth()->user()->id, $request->user_id);
         $this->authorize('store', [Reservation::class, $request]);
         $reservation = $this->reservationService->store($request);
 
@@ -46,7 +49,7 @@ class ReservationController extends Controller
             return response(['message' => 'Reservation date conflict. Date after '.$reservation['result']->format('Y-m-d').' required'], ResponseAlias::HTTP_BAD_REQUEST);
         else{
             if(!$reservation['result'])
-                return response(['message' => 'Invalid request!'], ResponseAlias::HTTP_UNPROCESSABLE_ENTITY);
+                return response(['message' => 'Unprocessable entity!'], ResponseAlias::HTTP_UNPROCESSABLE_ENTITY);
 
             Mail::to(auth()->user()->email)->queue(new ReservationConfirmationMail($reservation['result']));
             return response(['reservation' => ReservationResource::make($reservation['result'])], ResponseAlias::HTTP_CREATED);
@@ -60,7 +63,7 @@ class ReservationController extends Controller
     {
         $reservations = $this->reservationService->myReservations($request);
         if(!$reservations)
-            return response(['message' => 'Invalid request!'], ResponseAlias::HTTP_BAD_REQUEST);
+            return response(['message' => 'Unprocessable entity!'], ResponseAlias::HTTP_UNPROCESSABLE_ENTITY);
         return response(['reservations' => $reservations], ResponseAlias::HTTP_OK);
     }
 
@@ -106,4 +109,13 @@ class ReservationController extends Controller
             return response(['message' => 'Delete failed!'], ResponseAlias::HTTP_BAD_REQUEST);
         return response(['message' => 'Delete successful!'], ResponseAlias::HTTP_OK);
     }
+
+    public function export(ReservationsExportRequest $request)
+    {
+        $reservations = $this->reservationService->export($request);
+        if(!$reservations)
+            return response(['message' => 'Unprocessable entity!'], ResponseAlias::HTTP_UNPROCESSABLE_ENTITY);
+        return Excel::download(new ReservationsReportExport($reservations), 'reservations-report-export.xlsx');
+    }
+
 }

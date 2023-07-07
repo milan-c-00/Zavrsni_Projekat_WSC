@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->foreignId('brand_id')->constrained()->cascadeOnDelete();
             $table->foreignId('vehicle_model_id')->constrained()->cascadeOnDelete();
-            $table->boolean('available')->default(true);
             $table->year('year');
             $table->integer('price');
             $table->string('fuel');

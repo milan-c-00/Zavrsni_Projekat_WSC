@@ -49,9 +49,11 @@ Route::middleware('auth:sanctum')->group( function () {
         Route::post('/vehicles', [VehicleController::class, 'store']);      // Store vehicle
         Route::put('/vehicles/{vehicle}', [VehicleController::class, 'update']);    // Update vehicle
         // Route::post('/vehicles/{vehicle}', [VehicleController::class, 'update']);   // Only for testing update with postman
-        Route::delete('/vehicles/{vehicle}', [VehicleController::class, 'destroy']);
+        Route::delete('/vehicles/{vehicle}', [VehicleController::class, 'destroy']);    // Delete vehicle
 
         Route::get('/reservations', [ReservationController::class, 'index']);       // List all existing reservations
+
+        Route::get('/reservations-export', [ReservationController::class, 'export']);
 
     });
 
@@ -62,6 +64,7 @@ Route::middleware('auth:sanctum')->group( function () {
 
         Route::get('/my-reservations', [ReservationController::class, 'myReservations']);       // Get only current users reservations
 
+        // ApiResource routes for default CRUD operations on reservations
         Route::apiResource('/reservations', ReservationController::class)->except('index');
 
     });

@@ -15,6 +15,10 @@ class UserFactory extends Factory
      *
      * @return array<string, mixed>
      */
+
+    /*
+     * We use user factory only for admins
+     */
     public function definition(): array
     {
         return [

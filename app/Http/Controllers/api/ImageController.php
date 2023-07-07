@@ -23,21 +23,27 @@ class ImageController extends Controller
 
         $vehicle_img = $this->imageService->storeImage($request->file('image'), $vehicle);
         if(!$vehicle_img) {
-            return response(['message' => 'Invalid request!'], ResponseAlias::HTTP_BAD_REQUEST);
+            return response(['message' => 'Unprocessable entity!'], ResponseAlias::HTTP_UNPROCESSABLE_ENTITY);
         }
         return response (['message' => 'Image uploaded!'],ResponseAlias::HTTP_OK);
     }
 
     public function updateVehicleImage($vehicle, UpdateVehicleRequest $request) {
 
-        //$vehicle->image?//delete();
         if($vehicle->image)
             $this->imageService->deleteImage($vehicle->image);
         $vehicle_img = $this->imageService->storeImage($request->file('image'), $vehicle);
         if(!$vehicle_img) {
-            return response(['message' => 'Invalid request!'], ResponseAlias::HTTP_BAD_REQUEST);
+            return response(['message' => 'Unprocessable entity!'], ResponseAlias::HTTP_UNPROCESSABLE_ENTITY);
         }
         return response (['message' => 'Image updated!'],ResponseAlias::HTTP_OK);
+    }
+
+    public function deleteImage(Image $image) {
+
+        $this->imageService->deleteImage($image);
+        return response(['message' => 'Delete successful!'], ResponseAlias::HTTP_OK);
+
     }
 
 }

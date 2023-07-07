@@ -11,6 +11,7 @@ class UserSeeder extends Seeder
 {
     /**
      * Run the database seeds.
+     * Seed admin for every given email in list
      */
 
     protected $emails = ['admin@mailinator.com', 'admin2@mailinator.com', 'admin3@mailinator.com'];

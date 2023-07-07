@@ -23,7 +23,7 @@ class VehicleController extends Controller
     public function index(Request $request) {
         $vehicles = VehicleResource::collection($this->vehicleService->index($request));
         if(!$vehicles){
-            return response(['message' => 'Bad request!'], ResponseAlias::HTTP_BAD_REQUEST);
+            return response(['message' => 'Unprocessable entity!'], ResponseAlias::HTTP_UNPROCESSABLE_ENTITY);
         }
         return response(['vehicles' => $vehicles], ResponseAlias::HTTP_OK);
     }
@@ -43,7 +43,7 @@ class VehicleController extends Controller
         $vehicle = $this->vehicleService->store($request);
 
         if(!$vehicle)
-            return response(['message' => 'Invalid request!'], ResponseAlias::HTTP_UNPROCESSABLE_ENTITY);
+            return response(['message' => 'Unprocessable entity!'], ResponseAlias::HTTP_UNPROCESSABLE_ENTITY);
         return response(['vehicle' => VehicleResource::make($vehicle)], ResponseAlias::HTTP_CREATED);
     }
 

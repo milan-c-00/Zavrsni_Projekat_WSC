@@ -7,6 +7,8 @@ use App\Http\Controllers\api\ImageController;
 use App\Http\Requests\StoreVehicleRequest;
 use App\Models\Vehicle;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use function Symfony\Component\Translation\t;
 
 
 class VehicleService
@@ -41,26 +43,30 @@ class VehicleService
             $brand_id = $request->input('brand_id');
             $vehicles->where('brand_id', $brand_id);
         }
-        if ($request->has('brand_name')){
-            $brand_name = $request->input('brand_name');
-            $vehicles->join('brands', 'vehicles.brand_id', '=', 'brands.id')
-                ->where('brands.name', '=', $brand_name);
-        }
         if ($request->has('model_id')){
             $model_id = $request->input('model_id');
             $vehicles->where('vehicle_model_id', $model_id);
         }
-        if ($request->has('model_name')){
-            $model_name = $request->input('model_name');
-            $vehicles->join('vehicle_models', 'vehicles.brand_id', '=', 'vehicle_models.id')
-                ->where('vehicle_models.name' , '=', $model_name);
-        }
+
+        // Only if we had name based search for some reason
+//        if ($request->has('brand_name')){
+//            $brand_name = $request->input('brand_name');
+//            $vehicles->join('brands', 'vehicles.brand_id', '=', 'brands.id')
+//                ->where('brands.name', '=', $brand_name);
+//        }
+//        if ($request->has('model_name')){
+//            $model_name = $request->input('model_name');
+//            $vehicles->join('vehicle_models', 'vehicles.vehicle_model_id', '=', 'vehicle_models.id')
+//                ->where('vehicle_models.name' , '=', $model_name);
+//        }
+
         if ($request->has('search_term')){
             $term = $request->input('search_term');
             $vehicles->join('brands', 'vehicles.brand_id', '=', 'brands.id')
                 ->join('vehicle_models', 'vehicles.vehicle_model_id', '=', 'vehicle_models.id')
-                ->where('brands.name', 'LIKE', '%'.$term.'%')
-                ->orWhere('vehicle_models.name', 'LIKE', '%'.$term.'%');
+                ->where('brands.name', 'LIKE', "%$term%")
+                ->orWhere('vehicle_models.name', 'LIKE', "%$term%")
+                ->select('vehicles.*', 'brands.name as brand_name', 'vehicle_models.name as model_name');
         }
 
         return $vehicles->get();

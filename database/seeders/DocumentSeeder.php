@@ -16,17 +16,17 @@ class DocumentSeeder extends Seeder
         $this->documentService = $documentService;
     }
     protected $documentMappings = [
-        'audi_a4.xlsx' => 1,
-        'bmw3.docx' => 2,
-        'tucson.docx' => 3,
-        'range_rover.docx' => 4,
-        'mazda6.docx' => 5,
-        'e_class.docx' => 6,
-        'qashqai.docx' => 7,
-        'peugeot_508.docx' => 8,
-        'superb.docx' => 9,
-        'passat.docx' => 10,
-        'xc_60.docx' => 11
+        'audi_a4.pdf' => 1,
+        'bmw3.pdf' => 2,
+        'tucson.pdf' => 3,
+        'range_rover.pdf' => 4,
+        'mazda6.pdf' => 5,
+        'e_class.pdf' => 6,
+        'qashqai.pdf' => 7,
+        'peugeot_508.pdf' => 8,
+        'superb.pdf' => 9,
+        'passat.pdf' => 10,
+        'xc_60.pdf' => 11
     ];
     /**
      * Run the database seeds.
